@@ -16,6 +16,11 @@ export default new Router({
       component: require("@/views/prefrence/").default,
     },
     {
+      path: "/download",
+      name: "download-page",
+      component: require("@/views/download/").default,
+    },
+    {
       path: "*",
       redirect: "/",
     },

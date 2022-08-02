@@ -4,6 +4,8 @@ import { app, BrowserWindow, Menu } from "electron";
 import "../renderer/store";
 import { prefrence } from "./prefrence";
 import "./renderEvents";
+import store from "../renderer/store/index";
+import "./doenload";
 
 if (process.env.NODE_ENV !== "development") {
   global.__static = require("path")
@@ -26,6 +28,7 @@ function createWindow() {
   });
 
   mainWindow.loadURL(winURL);
+  store.dispatch("setMainWindowId", mainWindow.id);
 
   mainWindow.on("closed", () => {
     mainWindow = null;
@@ -45,7 +48,7 @@ function createMenu() {
               //   label: "偏好设置",
               //   accelerator: process.platform === "darwin" ? "Cmd+P" : "Ctrl+P",
               //   click: async () => {
-              //     prefrence(mainWindow);
+              //     prefrence();
               //   },
               // },
               { role: "quit", label: "退出" },

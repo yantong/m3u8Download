@@ -1,7 +1,13 @@
 <template>
   <div id="wrapper">
     <div class="search">
-      <el-input class="search-input" v-model="input" size="medium"></el-input>
+      <el-input
+        class="search-input"
+        v-model="url"
+        size="medium"
+        @input="setDownloadUrl"
+        @keyup.native.enter="openDownloadPage"
+      ></el-input>
     </div>
     <tab></tab>
   </div>
@@ -17,30 +23,39 @@ export default {
   components: { Tab },
   data() {
     return {
-      input: "",
+      url: "https://v5.szjal.cn/20210614/09CazJvM/index.m3u8",
     };
   },
   created() {
     this.getDownloadPath();
+    this.setDownloadUrl(this.url);
   },
   computed: {
     ...mapState({
       downloadPath: (state) => state.Prefrence.downloadPath,
+      downloadUrl: (state) => state.GlobalData.downloadUrl,
     }),
   },
   methods: {
     ...mapActions({
       setDownloadPath: "setDownloadPath",
+      setDownloadUrl: "setDownloadUrl",
     }),
 
     getDownloadPath() {
       ipcRenderer.on("getPath", (event, path) => {
         this.setDownloadPath(path);
       });
+      ipcRenderer.on("downloadReady", () => {
+        this.setDownloadUrl((this.url = ""));
+      });
 
       if (!this.downloadPath) {
         ipcRenderer.send("getPath", "downloads");
       }
+    },
+    openDownloadPage() {
+      this.downloadUrl && ipcRenderer.send("openDownloadPage");
     },
   },
 };

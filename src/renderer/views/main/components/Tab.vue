@@ -13,11 +13,19 @@
       >
     </div>
     <el-divider class="divider"></el-divider>
+    <div>
+      <download-tab v-show="selTab == 'downloading'"></download-tab>
+    </div>
   </div>
 </template>
 
 <script>
+import DownloadTab from "./DownloadTab.vue";
+
 export default {
+  components: {
+    DownloadTab,
+  },
   data() {
     return {
       tabItems: [
@@ -25,10 +33,10 @@ export default {
           name: "正在下载",
           value: "downloading",
         },
-        {
-          name: "已完成",
-          value: "downloaded",
-        },
+        // {
+        //   name: "已完成",
+        //   value: "downloaded",
+        // },
       ],
       selTab: "downloading",
     };
